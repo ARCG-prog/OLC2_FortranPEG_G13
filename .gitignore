@@ -1,3 +1,5 @@
+Backend/peggy/*.js
+
 # Logs
 logs
 *.log
