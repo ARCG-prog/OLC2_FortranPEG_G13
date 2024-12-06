@@ -19,11 +19,19 @@ app.post('/analyze', (req, res) => {
     res.json({ success: true, output });
   } catch (error) {
     if (error instanceof Parser.SyntaxError) {
-      const location = (error as any).location;
-      const message = location
-        ? `Error de sintaxis en la línea ${location.start.line}, columna ${location.start.column}: ${(error as any).message}`
-        : `Error de sintaxis: ${(error as any).message}`;
-      res.status(400).json({ success: false, error: message });
+      const location = error.location;
+
+      if (location) {
+        // Obtén el carácter donde ocurrió el error
+        const errorChar = input[location.start.offset] || 'EOF';
+        const message = `Error de sintaxis en la línea ${location.start.line}, columna ${location.start.column}:
+Caracter problemático: '${errorChar}'
+Mensaje: ${error.message}`;
+
+        res.status(400).json({ success: false, error: message });
+      } else {
+        res.status(400).json({ success: false, error: `Error de sintaxis: ${error.message}` });
+      }
     } else {
       res.status(500).json({ success: false, error: 'Error desconocido' });
     }
