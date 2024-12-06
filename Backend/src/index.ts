@@ -1,44 +1,55 @@
-import express from 'express';
-import cors from 'cors'; // Importa cors
-import { readFileSync } from 'node:fs';
-import * as Parser from '../dist/grammar.js';
+//import { func } from "./folder/hola.js";
+import * as Parser from '../peggy/grammar.js';
 
-const app = express();
-const PORT = 3001;
+const analizar = document.getElementById('btn_analizar') as HTMLButtonElement; 
+const editor = document.getElementById('inputCode') as HTMLTextAreaElement;
+const outputDiv = document.getElementById('outputCode') as HTMLDivElement;
+const nuevo = document.getElementById('btn_nuevo') as HTMLButtonElement;
 
-// Middleware para habilitar CORS
-app.use(cors()); // Habilita CORS
-app.use(express.json());
-
-// Endpoint para analizar el código
-app.post('/analyze', (req, res) => {
-  const input = req.body.code;
-
+analizar.addEventListener('click', () => { 
   try {
-    const output = Parser.parse(input);
-    res.json({ success: true, output });
+    const input = editor.value; // Obtén el valor del editor
+    const output = Parser.parse(input); // Intenta analizar el input con PEG.js
+    console.log(output); // Muestra el resultado en la consola
+
+    outputDiv.innerHTML = "Cadena válida"; // Muestra un mensaje si no hay errores
   } catch (error) {
-    if (error instanceof Parser.SyntaxError) {
-      const location = error.location;
+    if (error instanceof Error) {
+      // Extraer información específica del error de PEG.js
+      const details = (error as any).location; // PEG.js incluye `location` en los errores
+      const found = (error as any).found; // Token encontrado
+      const expected = (error as any).expected; // Tokens esperados
 
-      if (location) {
-        // Obtén el carácter donde ocurrió el error
-        const errorChar = input[location.start.offset] || 'EOF';
-        const message = `Error de sintaxis en la línea ${location.start.line}, columna ${location.start.column}:
-Caracter problemático: '${errorChar}'
-Mensaje: ${error.message}`;
+      let errorMessage = `Error al analizar el input:\n`;
+      errorMessage += `Mensaje: ${error.message}\n`;
 
-        res.status(400).json({ success: false, error: message });
-      } else {
-        res.status(400).json({ success: false, error: `Error de sintaxis: ${error.message}` });
+      if (details) {
+        const { start, end } = details;
+        errorMessage += `Posición: Línea ${start.line}, Columna ${start.column}\n`;
+        errorMessage += `Rango: Caracteres ${start.offset} - ${end.offset}\n`;
       }
+
+      if (found !== undefined) {
+        errorMessage += `Token encontrado: "${found}"\n`;
+      }
+
+      if (expected && expected.length > 0) {
+        const expectedTokens = expected.map((e: any) => `"${e.text || e.description}"`).join(", ");
+        errorMessage += `Tokens esperados: ${expectedTokens}\n`;
+      }
+
+      console.error("Error detallado:", error.message, details); // Muestra información en la consola
+      outputDiv.innerHTML = errorMessage; // Muestra la información detallada en el div
+
     } else {
-      res.status(500).json({ success: false, error: 'Error desconocido' });
+      console.error("Error desconocido:", error); // En caso de que no sea una instancia de Error
+      outputDiv.innerHTML = `Error desconocido`;
     }
   }
+
 });
 
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+nuevo.addEventListener('click', () => {
+  editor.value = "";
+  outputDiv.innerHTML = "";
 });
