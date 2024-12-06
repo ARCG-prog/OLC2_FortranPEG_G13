@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors'; // Importa cors
 import { readFileSync } from 'node:fs';
-import * as Parser from './grammar.js';
+import * as Parser from '../dist/grammar.js';
 
 const app = express();
 const PORT = 3001;

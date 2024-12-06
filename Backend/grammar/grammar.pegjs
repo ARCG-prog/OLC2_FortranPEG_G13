@@ -1,20 +1,20 @@
-    inicio
+inicio
     = reglas;
 
     reglas
     = regla+;
 
     regla
-    = identificador _ "=" _ expresion _ (";" _)?;
+    = identificador w "=" w expresion _ (";" _)? n?;
 
     expresion
-    = secuencia (_ "/" _ secuencia)*;
+    = secuencia (w "/"w secuencia)*;
 
     secuencia
     = prefijo (_ prefijo)*;
 
     prefijo
-    = (("&" / "!")? _)? sufijo;
+    = ("&" / "!" / "^")? _ sufijo;
 
     sufijo
     = primario _ ("*" / "+" / "?")?;
@@ -23,7 +23,13 @@
     = identificador
     / literal
     / clase_caracteres
-    / "(" _ expresion _ ")";
+    / "(" w expresion w ")"
+    / "[" w agrupacion+ w "]"
+    ;
+    
+    agrupacion= [0-9]
+    / [a-zA-Z]
+    ;
 
     literal
     = '"' [^"]* '"'
@@ -35,5 +41,9 @@
     identificador
     = [_a-z][_a-z0-9]*;
 
-    _ "whitespace"
+    n "newline" 
+    = [\n\r]*
+    _ "onlyspace"
+    = [ \t]*; // Manejo flexible de espacios en blanco y saltos de línea
+    w "whitespace"
     = [ \t\n\r]*; // Manejo flexible de espacios en blanco y saltos de línea
