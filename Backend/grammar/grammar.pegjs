@@ -1,4 +1,4 @@
-inicio
+    inicio
     = reglas;
 
     reglas

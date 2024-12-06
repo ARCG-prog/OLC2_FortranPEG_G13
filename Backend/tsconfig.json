@@ -7,6 +7,6 @@
     "skipLibCheck": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "dist/grammar.js"],
   "exclude": ["node_modules"]
 }

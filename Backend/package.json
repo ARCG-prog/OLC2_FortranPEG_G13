@@ -9,7 +9,6 @@
     "compile": "peggy --format es -o dist/grammar.js grammar/grammar.pegjs",
     "dev": "npm run compile && npm run build",
     "test": "npm run dev && npm run start"
-
   },
   "keywords": [],
   "author": "",
