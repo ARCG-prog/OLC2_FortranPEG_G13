@@ -1,1 +1,0 @@
-export const func = (name: string): string => `Hola, ${name}!`
