@@ -65,4 +65,4 @@ jobs:
       uses: actions/deploy-pages@v4
       with:
         artifact_name: 'frontend-artifacts'  # Nombre del artefacto que contiene tu index.html
-        artifact_name: 'js-artifacts'  # Nombre del artefacto que contiene tu index.js
+        #artifact_name: 'js-artifacts'  # Nombre del artefacto que contiene tu index.js
