@@ -5,10 +5,11 @@
         "target": "ES2021",
         "skipLibCheck": true,
         "allowJs": true,
+        "outDir": "./Frontend",
     },
     "include": [
         "Backend/src/**/*"
-, "Frontend/index.js"    ],
+    ],
     "exclude": [
         "node_modules"
     ]
