@@ -22,19 +22,13 @@ jobs:
       run: npm install
 
     - name: Build project
-      run: npm run start
+      run: npm run build  # Cambia a build si start no genera archivos de producción
 
-    - name: Upload Frontend Artifacts
+    - name: Upload All Artifacts
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './Frontend/'  # Asegúrate de que este sea el directorio donde se encuentra tu index.html e index.js
-        name: 'frontend-artifacts'
-    
-    - name: Upload JS Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        path: './dist'
-        name: js-artifacts
+        path: './dist ./Frontend/'  # Combina las rutas relevantes
+        name: 'deploy-artifacts'
 
   deploy:
     needs: build_site
@@ -46,24 +40,16 @@ jobs:
 
     environment:
       name: github-pages
-      
-    steps:
-    - name: Download Frontend Artifacts
-      uses: actions/download-artifact@v3
-      with:
-        path: './deploy/'
-        name: frontend-artifacts
-        
 
-    - name: Download JS Artifacts
+    steps:
+    - name: Download Deploy Artifacts
       uses: actions/download-artifact@v3
       with:
+        name: deploy-artifacts
         path: './deploy'
-        name: js-artifacts
-        
 
     - name: Deploy
       id: deployment
       uses: actions/deploy-pages@v4
       with:
-        artifact_name: './deploy' 
+        artifact_name: 'deploy-artifacts'
