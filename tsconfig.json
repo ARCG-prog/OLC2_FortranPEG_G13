@@ -8,7 +8,7 @@
     },
     "include": [
         "Backend/src/**/*"
-    ],
+, "Frontend/index.js"    ],
     "exclude": [
         "node_modules"
     ]
