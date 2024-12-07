@@ -24,17 +24,17 @@ jobs:
     - name: Build project
       run: npm run start
 
-    - name: Upload Artifacts
+    - name: Upload Frontend Artifacts
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './Frontend/'  # Asegúrate de que este sea el directorio donde se encuentra tu index.html e index.js
+        path: './Frontend'  # Directorio donde se encuentra tu index.html
         name: 'frontend-artifacts'
     
     - name: Upload JS Artifacts
       uses: actions/upload-artifact@v3
       with:
-        path: './dist'
-        name: js-artifacts
+        path: './dist'  # Directorio donde se encuentra tu index.js
+        name: 'js-artifacts'
 
   deploy:
     needs: build_site
@@ -48,6 +48,21 @@ jobs:
       name: github-pages
         
     steps:
+    - name: Download Frontend Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: 'frontend-artifacts'
+        path: './Frontend'  # Directorio donde se descargará el artefacto
+
+    - name: Download JS Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: 'js-artifacts'
+        path: './dist'  # Directorio donde se descargará el artefacto
+
     - name: Deploy
       id: deployment
       uses: actions/deploy-pages@v4
+      with:
+        artifact_name: 'frontend-artifacts'  # Nombre del artefacto que contiene tu index.html
+        artifact_name: 'js-artifacts'  # Nombre del artefacto que contiene tu index.js
