@@ -21,23 +21,20 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: List PEG files
-      run: ls -l Backend/peggy
-
-    - name: Compile PEG grammar
-      run: npm run compile
-
     - name: Build project
-      run: npm run build
+      run: npm run start
 
-    - name: List files
-      run: ls -R
-
-    - name: Upload All Artifacts
+    - name: Upload Frontend Artifacts
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './dist ./Frontend/'  # Combina las rutas relevantes
-        name: 'deploy-artifacts'
+        path: './Frontend'  # Directorio donde se encuentra tu index.html
+        name: 'frontend-artifacts'
+    
+    - name: Upload JS Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        path: './dist'  # Directorio donde se encuentra tu index.js
+        name: 'js-artifacts'
 
   deploy:
     needs: build_site
@@ -49,16 +46,22 @@ jobs:
 
     environment:
       name: github-pages
-
+        
     steps:
-    - name: Download Deploy Artifacts
+    - name: Download Frontend Artifacts
       uses: actions/download-artifact@v3
       with:
-        name: deploy-artifacts
-        path: './deploy'
+        name: 'frontend-artifacts'
+        path: './Frontend'  # Directorio donde se descargará el artefacto
+
+    - name: Download JS Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: 'js-artifacts'
+        path: './dist'  # Directorio donde se descargará el artefacto
 
     - name: Deploy
       id: deployment
-      uses: actions/deploy-pages@v4
-      with:
-        artifact_name: 'deploy-artifacts'
+      run: |
+        cp -r ./Frontend/* ./dist/
+        npx gh-pages -d ./dist
