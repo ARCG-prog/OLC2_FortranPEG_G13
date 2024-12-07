@@ -21,20 +21,26 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Compile PEG grammar
+      run: npm run compile
+
     - name: Build project
-      run: npm run start
+      run: npm run build
+
+    - name: List project files
+      run: ls -R
+
+    - name: Upload Dist Artifacts
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './dist'
+        name: 'dist-artifacts'
 
     - name: Upload Frontend Artifacts
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './Frontend'  # Directorio donde se encuentra tu index.html
+        path: './Frontend/'
         name: 'frontend-artifacts'
-    
-    - name: Upload JS Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        path: './dist'  # Directorio donde se encuentra tu index.js
-        name: 'js-artifacts'
 
   deploy:
     needs: build_site
@@ -46,22 +52,22 @@ jobs:
 
     environment:
       name: github-pages
-        
+
     steps:
+    - name: Download Dist Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: 'dist-artifacts'
+        path: './deploy/dist'
+
     - name: Download Frontend Artifacts
       uses: actions/download-artifact@v3
       with:
         name: 'frontend-artifacts'
-        path: './Frontend'  # Directorio donde se descargará el artefacto
-
-    - name: Download JS Artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: 'js-artifacts'
-        path: './dist'  # Directorio donde se descargará el artefacto
+        path: './deploy/frontend'
 
     - name: Deploy
       id: deployment
-      run: |
-        cp -r ./Frontend/* ./dist/
-        npx gh-pages -d ./dist
+      uses: actions/deploy-pages@v4
+      with:
+        artifact_name: 'frontend-artifacts'
