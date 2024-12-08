@@ -26,9 +26,10 @@ primario
 = identificador
     / literal
     / clase_caracteres
+    / punto
     / "(" w expresion w ")"
-    / "[" w agrupacion+ w "]"
     ;
+punto=".";
 
 agrupacion 
 = [0-9] / [a-zA-Z];
