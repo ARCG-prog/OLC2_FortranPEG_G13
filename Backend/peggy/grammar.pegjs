@@ -5,7 +5,7 @@ reglas
 = ((ε w)* regla)+;
 
 regla 
-= identificador comw "=" comw expresion (comw "/" comw expresion)* (comw ";")?  w_newline?;
+= identificador comw "=" comw expresion (comw "/" comw expresion)* (comw ";")? (w ε)*  w_newline?;
 
 expresion 
 = secuencia (comw "/" comw secuencia)*;
@@ -14,7 +14,7 @@ secuencia
 = prefijo (com_ prefijo)*;
 
 prefijo 
-= ("&" / "!" / "^")? com_ sufijo;
+= ("$" / "!" / "^")? com_ sufijo;
 
 sufijo 
 = primario (comw operador_repeticion)?;
@@ -62,8 +62,8 @@ w_blank
 = [ \t]+;
 
 
-comw=(w ε w)*;
-com_=(_ ε2 _)*
+comw=(w ε)* w;
+com_=(_ ε2)* _;
 
 ε = ε1 / ε2 ;
 ε1="//" (![\n] .)*;
