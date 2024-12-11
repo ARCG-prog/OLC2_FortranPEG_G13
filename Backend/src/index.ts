@@ -6,7 +6,7 @@ const editor = document.getElementById('inputCode') as HTMLTextAreaElement;
 const outputDiv = document.getElementById('outputCode') as HTMLDivElement;
 const nuevo = document.getElementById('btn_nuevo') as HTMLButtonElement;
 
-analizar.addEventListener('click', () => { 
+analizar.addEventListener('click', () => {
   try {
     const input = editor.value; // Obtén el valor del editor
     const output = Parser.parse(input); // Intenta analizar el input con PEG.js

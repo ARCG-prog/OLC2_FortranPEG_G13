@@ -2,7 +2,7 @@ inicio
 = reglas;
 
 reglas 
-= regla+;
+= ((ε w)* regla)+;
 
 regla 
 = identificador w "=" w expresion (w "/" w expresion)* (w ";")?  w_newline?;
@@ -41,7 +41,7 @@ clase_caracteres
 = "[" [^\]]+ "]";
 
 identificador 
-= [_a-z][_a-z0-9]*;
+= [_a-z]i[_a-z0-9]i*;
 
 w_newline 
 = (w_blank / newline)*;
@@ -57,6 +57,11 @@ w
 
 w_blank 
 = [ \t]+;
+
+ε = "//" (![\n] .)*
+            / "/*" (!("*/") .)* "*/";
+
+xd="xd2";
 //     _ "onlyspace"
 //     = [ \t]*; // Manejo flexible de espacios en blanco y saltos de línea
 //     w "whitespace"

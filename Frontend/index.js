@@ -1,5 +1,5 @@
 //import { func } from "./folder/hola.js";
-import * as Parser from '../Backend/peggy/grammar.js';
+import * as Parser from '../peggy/grammar.js';
 const analizar = document.getElementById('btn_analizar');
 const editor = document.getElementById('inputCode');
 const outputDiv = document.getElementById('outputCode');
