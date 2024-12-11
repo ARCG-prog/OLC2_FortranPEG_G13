@@ -5,19 +5,19 @@ reglas
 = ((ε w)* regla)+;
 
 regla 
-= identificador w "=" w expresion (w "/" w expresion)* (w ";")?  w_newline?;
+= identificador comw "=" comw expresion (comw "/" comw expresion)* (comw ";")?  w_newline?;
 
 expresion 
-= secuencia (w "/" w secuencia)*;
+= secuencia (comw "/" comw secuencia)*;
 
 secuencia 
-= prefijo (_ prefijo)*;
+= prefijo (com_ prefijo)*;
 
 prefijo 
-= ("&" / "!" / "^")? _ sufijo;
+= ("&" / "!" / "^")? com_ sufijo;
 
 sufijo 
-= primario (w operador_repeticion)?;
+= primario (comw operador_repeticion)?;
 
 operador_repeticion 
 = "*" / "+" / "?";
@@ -27,7 +27,7 @@ primario
     / literal
     / clase_caracteres
     / punto
-    / "(" w expresion w ")"
+    / "(" comw expresion comw ")"
     ;
 punto=".";
 
@@ -52,16 +52,24 @@ newline
 _ 
 = [ \t]*;
 
+
 w 
 = [ \t\n\r]*;
+
+
 
 w_blank 
 = [ \t]+;
 
-ε = "//" (![\n] .)*
-            / "/*" (!("*/") .)* "*/";
 
-xd="xd2";
+comw=(w ε w)*;
+com_=(_ ε2 _)*
+
+ε = ε1 / ε2 ;
+ε1="//" (![\n] .)*;
+ε2="/*" (!("*/") .)* "*/";
+
+xd="xd3";
 //     _ "onlyspace"
 //     = [ \t]*; // Manejo flexible de espacios en blanco y saltos de línea
 //     w "whitespace"
