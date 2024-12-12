@@ -1,64 +1,73 @@
-inicio
+inicio 
 = reglas;
 
-reglas
+reglas 
 = ((ε w)* regla)+;
 
-regla
-= identificador comw "=" comw expresion (comw "/" comw expresion)* (comw ";")? (w ε)*  w_newline?;
+regla 
+= identificador comw "=" comw produccion (comw "/" comw produccion)* (comw ";")? (w ε)*  w_newline?;
 
-expresion
+produccion 
 = secuencia (comw "/" comw secuencia)*;
 
-secuencia
+secuencia 
 = prefijo (com_ prefijo)*;
 
-prefijo
+prefijo 
 = ("$" / "!" / "&")? com_ sufijo;
 
-sufijo
-= pluck? w primario (comw operador_repeticion)?;
+sufijo 
+= pluck? _ primario (comw operador_repeticion)?;
+
 
 pluck
-= "@"? identificador w ":" w;
+= "@"? identificador w ":";
 
-operador_repeticion
-= "*" / "+" / "?";
+operador_repeticion 
+= "*" / "+" / "?"
+/ "|" w (numero / identificador ) w"|"
+/ "|" w (numero / identificador )? w ".." w (numero / identificador )? w"|"
+/ "|" w (numero / identificador )? w "," w primario w "|"
+/ "|" w (numero / identificador )? w ".." w (numero / identificador )? w "," w primario w "|"
+;
 
-primario
+primario 
 = identificador
     / literal
     / clase_caracteres
     / punto
-    / "(" comw expresion comw ")"
+    / "(" comw produccion comw ")"
     ;
 punto=".";
 
-agrupacion
+agrupacion 
 = [0-9] / [a-zA-Z];
 
-literal
+numero
+= [0-9]+;
+
+literal 
 = '"' [^"]* '"' / "'" [^']* "'";
 
-clase_caracteres
+clase_caracteres 
 = "[" [^\]]+ "]";
 
-identificador
+identificador 
 = [_a-z]i[_a-z0-9]i*;
 
-w_newline
+w_newline 
 = (w_blank / newline)*;
 
-newline
+newline 
 = [\n\r]+;
 
-_
+_ 
 = [ \t]*;
 
-w
+w 
 = [ \t\n\r]*;
 
-w_blank
+w_blank 
 = [ \t]+;
 
 
