@@ -5,7 +5,10 @@ reglas
 = ((ε w)* regla)+;
 
 regla 
-= identificador comw "=" comw produccion (comw "/" comw produccion)* (comw ";")? (w ε)*  w_newline?;
+= identificador w alias? comw "=" comw produccion (comw "/" comw produccion)* (comw ";")? (w ε)*  w_newline?;
+
+alias="\"" [^"]* "\""
+/ "'" [^']* "'";
 
 produccion 
 = secuencia (comw "/" comw secuencia)*;
@@ -14,21 +17,22 @@ secuencia
 = prefijo (com_ prefijo)*;
 
 prefijo 
-= ("$" / "!" / "&")? com_ sufijo;
+= "@"? nombrexp? _ ("$" / "!" / "&")? com_ sufijo;
 
 sufijo 
-= pluck? _ primario (comw operador_repeticion)?;
+= primario (comw operador_repeticion)?;
+/*@[hola]*/
+
+nombrexp= identificador w ":";
 
 
-pluck
-= "@"? identificador w ":";
 
 operador_repeticion 
 = "*" / "+" / "?"
 / "|" w (numero / identificador ) w"|"
 / "|" w (numero / identificador )? w ".." w (numero / identificador )? w"|"
-/ "|" w (numero / identificador )? w "," w primario w "|"
-/ "|" w (numero / identificador )? w ".." w (numero / identificador )? w "," w primario w "|"
+/ "|" w (numero / identificador )? w "," w produccion w "|"
+/ "|" w (numero / identificador )? w ".." w (numero / identificador )? w "," w produccion w "|"
 ;
 
 primario 
