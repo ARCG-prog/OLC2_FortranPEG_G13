@@ -163,7 +163,7 @@ function peg$parse(input, options) {
     var peg$c10 = "//";
     var peg$c11 = "/*";
     var peg$c12 = "*/";
-    var peg$c13 = "xd3";
+    var peg$c13 = "xd5";
     var peg$r0 = /^[!$\^]/;
     var peg$r1 = /^[*-+?]/;
     var peg$r2 = /^[0-9A-Za-z]/;
@@ -202,7 +202,7 @@ function peg$parse(input, options) {
     var peg$e23 = peg$anyExpectation();
     var peg$e24 = peg$literalExpectation("/*", false);
     var peg$e25 = peg$literalExpectation("*/", false);
-    var peg$e26 = peg$literalExpectation("xd3", false);
+    var peg$e26 = peg$literalExpectation("xd5", false);
     var peg$currPos = options.peg$currPos | 0;
     var peg$savedPos = peg$currPos;
     var peg$posDetailsCache = [{ line: 1, column: 1 }];

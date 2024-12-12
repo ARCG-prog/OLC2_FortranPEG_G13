@@ -69,7 +69,7 @@ com_=(w ε)* _;
 ε1="//" (![\n] .)*;
 ε2="/*" (!("*/") .)* "*/";
 
-xd="xd3";
+xd="xd5";
 //     _ "onlyspace"
 //     = [ \t]*; // Manejo flexible de espacios en blanco y saltos de línea
 //     w "whitespace"
