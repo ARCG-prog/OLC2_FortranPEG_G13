@@ -1,28 +1,31 @@
-inicio 
+inicio
 = reglas;
 
-reglas 
+reglas
 = ((ε w)* regla)+;
 
-regla 
+regla
 = identificador comw "=" comw expresion (comw "/" comw expresion)* (comw ";")? (w ε)*  w_newline?;
 
-expresion 
+expresion
 = secuencia (comw "/" comw secuencia)*;
 
-secuencia 
+secuencia
 = prefijo (com_ prefijo)*;
 
-prefijo 
-= ("$" / "!" / "^")? com_ sufijo;
+prefijo
+= ("$" / "!" / "&")? com_ sufijo;
 
-sufijo 
-= primario (comw operador_repeticion)?;
+sufijo
+= pluck? w primario (comw operador_repeticion)?;
 
-operador_repeticion 
+pluck
+= "@"? identificador w ":" w;
+
+operador_repeticion
 = "*" / "+" / "?";
 
-primario 
+primario
 = identificador
     / literal
     / clase_caracteres
@@ -31,39 +34,38 @@ primario
     ;
 punto=".";
 
-agrupacion 
+agrupacion
 = [0-9] / [a-zA-Z];
 
-literal 
+literal
 = '"' [^"]* '"' / "'" [^']* "'";
 
-clase_caracteres 
+clase_caracteres
 = "[" [^\]]+ "]";
 
-identificador 
+identificador
 = [_a-z]i[_a-z0-9]i*;
 
-w_newline 
+w_newline
 = (w_blank / newline)*;
 
-newline 
+newline
 = [\n\r]+;
 
-_ 
+_
 = [ \t]*;
 
-
-w 
+w
 = [ \t\n\r]*;
 
-
-
-w_blank 
+w_blank
 = [ \t]+;
 
 
 comw=(w ε)* w;
-com_=(_ ε2)* _;
+
+
+com_=(_ ε2)* _;//dudas
 
 ε = ε1 / ε2 ;
 ε1="//" (![\n] .)*;
