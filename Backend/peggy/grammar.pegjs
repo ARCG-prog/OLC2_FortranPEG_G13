@@ -5,7 +5,7 @@ reglas
 = ((ε w)* regla)+;
 
 regla 
-= identificador w alias? comw "=" comw produccion (comw "/" comw produccion)* (comw ";")? (w ε)*  w_newline?;
+= identificador comw alias? comw "=" comw produccion (comw "/" comw produccion)* (comw ";")? (w ε)*  w_newline?;
 
 alias="\"" [^"]* "\""
 / "'" [^']* "'";
@@ -17,22 +17,22 @@ secuencia
 = prefijo (com_ prefijo)*;
 
 prefijo 
-= "@"? nombrexp? _ ("$" / "!" / "&")? com_ sufijo;
+= "@"? nombrexp? com_ ("$" / "!" / "&")? com_ sufijo;
 
 sufijo 
 = primario (comw operador_repeticion)?;
 /*@[hola]*/
 
-nombrexp= identificador w ":";
+nombrexp= identificador comw ":";
 
 
 
 operador_repeticion 
 = "*" / "+" / "?"
-/ "|" w (numero / identificador ) w"|"
-/ "|" w (numero / identificador )? w ".." w (numero / identificador )? w"|"
-/ "|" w (numero / identificador )? w "," w produccion w "|"
-/ "|" w (numero / identificador )? w ".." w (numero / identificador )? w "," w produccion w "|"
+/ "|" comw (numero / identificador ) comw"|"
+/ "|" comw (numero / identificador )? comw ".." comw (numero / identificador )? comw"|"
+/ "|" comw (numero / identificador )? comw "," comw produccion comw "|"
+/ "|" comw (numero / identificador )? comw ".." comw (numero / identificador )? comw "," comw produccion comw "|"
 ;
 
 primario 
@@ -51,10 +51,16 @@ numero
 = [0-9]+;
 
 literal 
-= '"' [^"]* '"' / "'" [^']* "'";
+= '"' litcd '"' / "'" litcs "'";
+
+litcd=('\\"'/ [^"])*; //literal comillas dobles
+litcs=("\\'"/ [^'] )*; //literal comillas simples
 
 clase_caracteres 
-= "[" [^\]]+ "]";
+= "[" ccc"]";
+
+ccc= ('\\]'/ '\\[' /[^\]])+; //clase caracteres corhchetes
+
 
 identificador 
 = [_a-z]i[_a-z0-9]i*;
